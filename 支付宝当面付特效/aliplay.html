@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>支付宝特效</title>
+	<!-- 使用css3,里面的伸缩布局 -->
+	<style type="text/css">
+		html,body{
+			/*width:100vh;*/
+			height:100vh;
+			margin:0;
+			padding:0;
+			overflow: hidden;
+		}
+		body{
+			display:flex;
+			/*调整主轴以及侧轴的对其方式*/
+			justify-content:center;
+			align-items:center;
+			background:#1e577e;
+		}
+		.main{
+			position:relative;	
+			width:200px;
+			height:200px;
+		}
+		.main > div{
+			width:200px;
+			height:200px;
+			position:absolute;
+			left:0;
+			top:0;
+		}
+		.circle{
+			border:1px solid #ccc;
+			/*相对当前盒子*/
+			border-radius:50%;
+			opacity:0;
+			/*animation: change 3s linear infinite;*/
+		}
+		.circle.go{
+			/*animation: change 1s linear infinite;*/
+
+			animation-name:change;
+			/*这个动画执行3s*/
+			animation-duration:2s;
+			/*执行动画的速度*/
+			animation-timing-function: linear;
+			/*动画执行的次数*/
+			animation-iteration-count:infinite;
+
+			/*animation-delay:1s;*/
+		}
+		.center{
+			cursor:pointer;
+		}
+
+		@keyframes change{
+			0%{
+				transform: scale(1);
+				opacity:1;
+			}100%{
+				transform: scale(3);
+				opacity:0;
+			}
+		}
+	</style>
+	<!-- 
+		我们先把事件找到，根据事件找到方法，根据方法写业务逻辑，根据api去实现业务逻辑 
+		定义动画，使用动画
+	-->
+	
+</head>
+<body>
+	<div class="main">
+		<div class="circle"></div>
+		<div class="circle"></div>
+		<div class="circle"></div>
+		<div class="circle"></div>
+		<div class="circle"></div>
+		<div class="center">
+			<img src="当面付.png" alt="">
+		</div>
+	</div>
+	<!-- 中文名称无法识别 -->
+	<audio src="6944.mp3"></audio>
+
+	<script type="text/javascript">
+		document.querySelector(".center").onclick = function(){
+			var circles = document.querySelectorAll(".circle");
+			//js 里面操作必须一个一个遍历出来，然后单独操作
+			//如果使用jQuery，那就可以批量操作
+
+			for(let i = 0, len = circles.length; i < len; i++){
+
+				//获取 audio标签
+				var audio = document.querySelector("audio");
+				if(!circles[i].classList.contains("go")){
+					//给所有的circle 添加一个类名
+					//html5里面新增了api
+					// classList.add
+					circles[i].style.animationDelay = i * 0.4 + "s";
+					//时间间隔的问题
+					//5个circle同一时间执行动画
+					circles[i].classList.add("go");
+					if(audio.paused){
+						// 播放一段音频
+						audio.load();
+						// 播放n次
+						audio.loop = "loop";
+						//只播放一次
+						audio.play();
+					}
+				}else{
+					circles[i].classList.remove("go");
+					audio.pause();
+				}
+			}
+ 			
+		};
+	</script>
+</body>
+</html>
